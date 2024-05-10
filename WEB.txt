@@ -1,0 +1,116 @@
+// Factory
+function ShapeFactory() {}
+
+ShapeFactory.prototype.createShape = function (type) {
+    switch (type) {
+        case 'circle':
+            return new Circle();
+        case 'rectangle':
+            return new Rectangle();
+        case 'triangle':
+            return new Triangle();
+        default:
+            throw new Error('Invalid shape type');
+    }
+};
+
+function Circle() {
+    this.type = 'circle';
+}
+Circle.prototype.draw = function () {
+    console.log('Drawing a circle');
+};
+
+function Rectangle() {
+    this.type = 'rectangle';
+}
+Rectangle.prototype.draw = function () {
+    console.log('Drawing a rectangle');
+};
+
+function Triangle() {
+    this.type = 'triangle';
+}
+Triangle.prototype.draw = function () {
+    console.log('Drawing a triangle');
+};
+
+const factory = new ShapeFactory();
+const circle = factory.createShape('circle');
+circle.draw();
+
+const rectangle = factory.createShape('rectangle');
+rectangle.draw();
+
+const triangle = factory.createShape('triangle');
+triangle.draw();
+
+// Decorator
+class Coffee {
+    cost() {
+        return 5;
+    }
+}
+
+class MilkDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;
+    }
+
+    cost() {
+        return this.coffee.cost() + 2;
+    }
+}
+
+class WhipDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;
+    }
+
+    cost() {
+        return this.coffee.cost() + 3;
+    }
+}
+
+const myCoffee = new Coffee();
+const coffeeWithMilk = new MilkDecorator(myCoffee);
+const coffeeWithMilkAndWhip = new WhipDecorator(coffeeWithMilk);
+
+console.log(myCoffee.cost());
+console.log(coffeeWithMilk.cost());
+console.log(coffeeWithMilkAndWhip.cost());
+
+// Observer
+class Subject {
+    constructor() {
+        this.observers = [];
+    }
+
+    addObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    removeObserver(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);
+    }
+
+    notify(data) {
+        this.observers.forEach(observer => observer.update(data));
+    }
+}
+
+class Observer {
+    update(data) {
+        console.log("Received update:", data);
+    }
+}
+
+const subject = new Subject();
+
+const observer1 = new Observer();
+const observer2 = new Observer();
+
+subject.addObserver(observer1);
+subject.addObserver(observer2);
+
+subject.notify("Hello observers!");
